@@ -5,9 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    listItems:[],
+    showItems:[]
 
   },
   mutations: {
+    addItem(state,item){
+
+    },
+    allItems(state){
+
+    },
+
 
   },
   actions: {
