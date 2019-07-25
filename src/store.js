@@ -1,66 +1,68 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import item from './views/item'
 
 Vue.use(Vuex)
-Vue.use(axios)
 
 export default new Vuex.Store({
   state: {
-    listItems: [],
-    showItems: []
-
+    items: [],
+    tableStatus: 0,
+    username: ''
   },
   mutations: {
-    addItem (state, item) {
-      state.showItems.push(item)
-      state.listItems.push(item)
+    addItem (state, payload) {
+      state.items.push(...payload)
     },
-    complete (state) {
-      state.showItems = state.listItems.filter((item) => {
-        return item.isChecked
-      })
+    getOrders (state, payload) {
+      state.items.push(...payload)
     },
-    active (state) {
-      state.showItems = state.listItems.filter((item) => {
-        return !item.isChecked
-      })
+    updateItem (state, payload) {
+      for (let i = 0; i < state.items.length; i++) {
+        if (state.items[i].id === payload.id) {
+          state.items[i] = payload
+        }
+      }
     },
-    all (state) {
-      state.showItems = state.listItems.map(a => a)
-    },
-    print (state, item) {
-      state.showItems = item
+    deleteItem (state, payload) {
+      for (let i = 0; i < state.items.length; i++) {
+        if (state.items[i].id === payload.id) {
+          state.items.splice(i, 1)
+          break
+        }
+      }
     }
-
   },
   actions: {
-    addItems ({ commit }) {
-      axios.post('http://localhost:3001/todos/', item).then(response => {
-        commit('addItems', response.data)
+    async getOrders ({ commit }) {
+      console.log('asd')
+      await axios.get('http://localhost:8088/orders').then((response) => {
+        console.log(JSON.stringify(response.data))
+        commit('getOrders', response.data)
+      }).catch((response) => {
+        console.log(response)
       })
     },
-    complete ({ commit }) {
-      axios.get('http://localhost:3001/todos/').then(response => {
-        commit('complete', response.data)
+    async addItem ({ commit }, payload) {
+      await axios.post('http://localhost:3001/todos', payload).then((response) => {
+        commit('addItem', [response.data])
+      }).catch((response) => {
+        console.log(response)
       })
     },
-    active ({ commit }) {
-      axios.get('http://localhost:3001/todos/').then(response => {
-        commit('active', response.data)
+    async updateItem ({ commit }, payload) {
+      await axios.put('http://localhost:3001/todos/' + payload.id, payload).then((response) => {
+        commit('updateItem', response.data)
+      }).catch((response) => {
+        console.log(response)
       })
     },
-    all ({ commit }) {
-      axios.get('http://localhost:3001/todos/').then(response => {
-        commit('all', response.data)
-      })
-    },
-    getPickup ({ commit }) {
-      axios.get('http://localhost:3001/todos/').then(response => {
-        commit('getPickup', response.data)
+    async deleteItem ({ commit }, payload) {
+      await axios.delete('http://localhost:3001/todos/' + payload.id).then((response) => {
+        commit('deleteItem', payload)
+      }).catch((response) => {
+        console.log(response)
       })
     }
   }
-
 })
