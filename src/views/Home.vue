@@ -2,17 +2,13 @@
   <Row class="row-home">
     <div class="row-home-header">
       <div class="div-back"><h1>菜鸟驿站</h1></div>
-      <div class="div-username">
-        <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" class="row-home-header-avatar"/>
-        <span class="row-home-header-span">superAdmin</span>
-      </div>
     </div>
     <Layout class="row-col">
       <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
-        <Menu active-name="summary" theme="dark" width="auto" @on-select="selectMenuItem">
-          <MenuItem name="summary" class="menu-item-list">首页</MenuItem>
-          <MenuItem name="storage" class="menu-item-mine">包裹入库</MenuItem>
-          <MenuItem name="reserve" class="menu-item-mine">预约取件</MenuItem>
+        <Menu active-name="tableContent" theme="dark" width="auto" @on-select="selectMenuItem">
+          <MenuItem name="tableContent" class="menu-item-list">首页</MenuItem>
+          <MenuItem name="parcelStorage" class="menu-item-mine">包裹入库</MenuItem>
+          <MenuItem name="appointment" class="menu-item-mine">预约取件</MenuItem>
         </Menu>
         <div slot="trigger"></div>
       </Sider>
@@ -60,5 +56,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
